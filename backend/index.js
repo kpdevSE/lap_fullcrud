@@ -13,6 +13,7 @@ const port = process.env.SERVER_PORT | 3000;
 // import routes
 const blogRouter = require("./route/blogRoute");
 const departmentsRouter = require("./route/departmentRoute");
+const bookingRouter = require("./route/bookingRoute");
 
 // Initialize app
 
@@ -84,5 +85,5 @@ app.post("/login", (req, res) => {
 });
 
 app.use("/api/v1/blogs", blogRouter);
-
 app.use("/api/v2/departments", departmentsRouter);
+app.use("/api/v3/bookings", bookingRouter);
