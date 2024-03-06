@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const FormDataModel = require("./model/FormData");
+const AdminFormData = require("./model/adminSchema");
 
 //importing dot env
 require("dotenv").config();
@@ -51,6 +52,7 @@ app.get("/home", (req, resp) => {
     message: "Hello World",
   });
 });
+
 app.post("/register", (req, res) => {
   // To post / insert data into database
 
@@ -69,6 +71,40 @@ app.post("/login", (req, res) => {
   // To find record from the database
   const { email, password } = req.body;
   FormDataModel.findOne({ email: email }).then((user) => {
+    if (user) {
+      // If user found then these 2 cases
+      if (user.password === password) {
+        res.json("Success");
+      } else {
+        res.json("Wrong password");
+      }
+    }
+    // If user not found then
+    else {
+      res.json("No records found! ");
+    }
+  });
+});
+
+app.post("/admin/register", (req, res) => {
+  // To post / insert data into database
+
+  const { email, password } = req.body;
+  AdminFormData.findOne({ email: email }).then((user) => {
+    if (user) {
+      res.json("Already registered");
+    } else {
+      AdminFormData.create(req.body)
+        .then((log_reg_form) => res.json(log_reg_form))
+        .catch((err) => res.json(err));
+    }
+  });
+});
+
+app.post("/admin/login", (req, res) => {
+  // To find record from the database
+  const { email, password } = req.body;
+  AdminFormData.findOne({ email: email }).then((user) => {
     if (user) {
       // If user found then these 2 cases
       if (user.password === password) {
